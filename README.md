@@ -171,11 +171,11 @@ Content-Type: multipart/form-data
 
 ---
 
-# **AvaMarket - 模板市场前端系统**
+# **AvaMarket - Dify场景市场**
 
 ## **系统概述**
 
-AvaMarket 是一个现代化的模板市场前端系统，专注于 AI 工作流模板、平台集成和 MCP 服务的展示与分发。系统采用 React + Vite 技术栈，具备响应式设计和现代化的用户界面。
+AvaMarket 是一个专门为 Dify 平台打造的场景市场，专注于 Dify 工作流场景、应用模板和插件的展示与分发。系统采用 React + Vite 技术栈，具备响应式设计和现代化的用户界面，为 Dify 用户提供丰富的场景资源。
 
 ## **核心功能特性**
 
@@ -185,9 +185,9 @@ AvaMarket 是一个现代化的模板市场前端系统，专注于 AI 工作流
 - **动态内容展示**: 每个二级分类最多显示6个精选内容，支持"explore more"扩展查看
 
 ### **2. 内容类型支持**
-- **Template**: AI工作流模板，支持多平台DSL文件
-- **Platform**: 第三方平台集成服务
-- **MCP**: Model Context Protocol 服务
+- **Dify Workflow**: Dify 工作流场景模板
+- **Dify App**: Dify 应用模板
+- **Dify Plugin**: Dify 插件和扩展
 
 ### **3. 高级搜索与筛选**
 - **实时搜索**: 支持标题、标签的实时搜索
@@ -204,22 +204,22 @@ AvaMarket 是一个现代化的模板市场前端系统，专注于 AI 工作流
 
 ### **2. 内容详情页 (DetailPage)**
 - **两栏布局**: 左栏(1/3)显示元数据，右栏(2/3)显示预览和文档
-- **平台切换器**: 支持Dify、n8n等平台的DSL文件切换
+- **Dify场景预览**: 专门针对Dify工作流的可视化预览
 - **SVG预览窗口**: 可交互的SVG预览，支持拖拽和缩放
 - **Markdown渲染**: 完整的README文档渲染，支持下载和代码/渲染视图切换
 - **元数据展示**: 作者信息、认证徽章、更新时间、下载量、分类信息
 
 ### **3. 内容发布页 (PublishPage)**
-- **类型选择**: 支持Template、Platform、MCP三种类型
+- **类型选择**: 支持Dify Workflow、Dify App、Dify Plugin三种类型
 - **动态表单**: 根据类型动态显示对应表单字段
-- **DSL文件管理**: 支持多平台 DSL 文件上传和管理，每个平台（Dify/n8n/Coze）只能选择一次，且每个平台成套上传 DSL 文件和 SVG 预览图
+- **Dify文件管理**: 支持Dify工作流文件、应用配置和插件文件的上传管理
 - **README编辑器**: 支持 Markdown 格式内容编辑，并支持本地 .md 文件上传自动填充
 
 ## **用户界面组件**
 
 ### **1. 顶部导航栏 (Header)**
 - **品牌标识**: AvaMarket Logo和品牌名称
-- **主导航**: Templates、Platforms、MCP三个主要分类
+- **主导航**: Workflows、Apps、Plugins三个主要分类
 - **操作按钮**: Publish按钮（带发光效果）
 - **用户中心**: 头像下拉菜单，包含Profile、My Posts、Logout
 

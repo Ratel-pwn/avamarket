@@ -15,9 +15,9 @@ export default function HomeBento() {
           <div >
             <div className="icon-pill"><Package size={18}/> All-in-one</div>
           </div>
-          <h2 className="text-white">Seamless Cross-Platform Collaboration</h2>
+          <h2 className="text-white">Dify Scenario Marketplace</h2>
           <p className="text-white opacity-60 text-sm">
-          Seamlessly integrate with n8n, Dify, coze and more. One platform, endless possibilities—a unified system for all your workflow needs.
+          A dedicated marketplace for Dify platform, offering rich workflow scenarios, app templates, and plugin resources to make your AI application development more efficient.
           </p>
 
           {/* <div className="hero-logos mb-24">
@@ -30,10 +30,10 @@ export default function HomeBento() {
         {/* 右上 - 冰蓝到杏桃 + dotted 线 + 工作流 SVG */}
         <article className="bento grad-ice-to-peach col-span-4 lock-1x1 text-[var(--primary-font)] text-sm">
           <div >
-            <h2><Workflow size={18} />Preview and Download Workflows</h2>
+            <h2><Workflow size={18} />Preview and Download Dify Scenarios</h2>
           </div>
           <p className="pb-40">
-          See your workflows come to life with interactive previews. Download nodes instantly for use in your favorite platforms.
+          View Dify workflow scenarios with interactive previews. Download and use them directly in your Dify platform for seamless AI application development.
           </p>
 
           {/* dotted 框 + main 标签 */}
@@ -61,20 +61,20 @@ export default function HomeBento() {
         {/* 右上 - 柠黄到冰蓝 + 进度条 */}
           <article className="bento grad-sun-to-sky col-span-4 lock-1x1 text-[var(--primary-font)] text-sm">
           <div>
-            <h2><ShoppingBag size={18}/> Welcome to the AI Market</h2>
+            <h2><ShoppingBag size={18}/> Welcome to Dify Marketplace</h2>
           </div>
           <p>
-          Discover AI workflows, platform integrations, and MCP services—all in one place. Your gateway to smarter automation and productivity.
+          Discover rich Dify workflow scenarios, app templates, and plugin resources—a one-stop Dify ecosystem marketplace for smarter AI application development.
           </p>
         </article>
 
         {/* 右下 - 青绿到冰蓝 + CTA */}
         <article className="bento grad-teal-to-ice col-span-8 text-[var(--primary-font)] text-sm">
           <div >
-            <h2><LayoutTemplate size={18}/>Explore Our Categories</h2>
+            <h2><LayoutTemplate size={18}/>Explore Dify Categories</h2>
           </div>
           <p>
-          Templates for AI workflows, platform integrations, and MCP services—explore them all to boost your productivity.
+          Dify workflow scenarios, app templates, and plugin resources—explore them all to boost your AI application development productivity.
           </p>
         </article>
       </div>

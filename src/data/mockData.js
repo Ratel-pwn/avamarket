@@ -73,22 +73,22 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "你的专属AI助理，支持语音与文本交互",
     lastUpdate: "1 week ago",
-    dslFiles: [{ platformName: "Dify", fileUrl: "#" }, { platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: mockReadme
   },
   {
     id: "template-2",
-    title: "Chat with local LLMs using n8n and Ollama",
+    title: "Chat with local LLMs using Dify and Ollama",
     author: { name: "Bob", avatar: "https://api.dicebear.com/9.x/bottts/svg?seed=Bob", isVerified: false, isOfficial: false },
     downloads: 1987,
     category: "AI",
     subcategory: "Featured AI templates",
-    labels: ["n8n", "Ollama", "OpenAI"],
+    labels: ["Dify", "Ollama", "OpenAI"],
     svgPreview: "https://via.placeholder.com/300x200",
-    description: "本地大模型聊天机器人，支持n8n与Ollama",
+    description: "本地大模型聊天机器人，支持Dify与Ollama",
     lastUpdate: "3 days ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
-    readme: "# Chat with local LLMs\n\n- 本地部署\n- 支持Ollama\n- n8n集成"
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
+    readme: "# Chat with local LLMs\n\n- 本地部署\n- 支持Ollama\n- Dify集成"
   },
   {
     id: "template-3",
@@ -129,7 +129,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "自动邮件标签分类，提升效率",
     lastUpdate: "2 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Gmail Labelling\n\n- 自动标签\n- OpenAI分类\n- Gmail API"
   },
   {
@@ -173,7 +173,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "飞书客服机器人，自动回复常见问题",
     lastUpdate: "2 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Feishu Chatbot\n\n- 飞书客服\n- OpenAI问答"
   },
   {
@@ -201,7 +201,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "多语言支持的全球团队聊天机器人",
     lastUpdate: "1 month ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Multi-language Chatbot\n\n- 多语言\n- Google Sheets"
   },
   {
@@ -229,7 +229,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "智能客服机器人，支持多平台集成",
     lastUpdate: "2 months ago",
-    dslFiles: [{ platformName: "Dify", fileUrl: "#" }, { platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# AI Customer Service Bot\n\n## 功能特性\n- 智能问答\n- 多平台支持\n- 自动学习\n\n## 使用方法\n1. 下载DSL文件\n2. 导入到对应平台\n3. 配置API密钥"
   },
 
@@ -259,7 +259,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "HR政策RAG问答机器人",
     lastUpdate: "2 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# HR RAG\n\n- HR政策\n- Notion知识库"
   },
   {
@@ -287,7 +287,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "学术论文RAG检索",
     lastUpdate: "1 month ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Academic RAG\n\n- 学术论文\n- Google Drive"
   },
   {
@@ -315,7 +315,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "营销资料RAG问答",
     lastUpdate: "3 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Marketing RAG\n\n- 营销资料\n- Google Drive"
   },
 
@@ -345,7 +345,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "邮件对话自动摘要",
     lastUpdate: "2 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Email Summarizer\n\n- 邮件摘要\n- Gmail集成"
   },
   {
@@ -373,7 +373,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "Slack频道消息摘要",
     lastUpdate: "1 month ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Slack Summarizer\n\n- Slack频道\n- 消息摘要"
   },
   {
@@ -401,7 +401,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "PDF文档自动摘要",
     lastUpdate: "3 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# PDF Summarizer\n\n- PDF摘要\n- Google Drive"
   },
 
@@ -431,7 +431,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "音频转文字，支持多语言",
     lastUpdate: "2 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Audio Transcription\n\n- 音频转文字\n- Whisper"
   },
   {
@@ -459,7 +459,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "OCR文档处理与分析",
     lastUpdate: "1 month ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# OCR Processing\n\n- OCR识别\n- 文档分析"
   },
   {
@@ -487,7 +487,7 @@ export const templates = [
     svgPreview: "https://via.placeholder.com/300x200",
     description: "无障碍图片转文本",
     lastUpdate: "3 week ago",
-    dslFiles: [{ platformName: "n8n", fileUrl: "#" }],
+    dslFiles: [{ platformName: "Dify", fileUrl: "#" }],
     readme: "# Image-to-Text\n\n- 无障碍\n- 图片转文本"
   }
 ];

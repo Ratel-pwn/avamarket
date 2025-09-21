@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Workflow, ArrowLeft, ChevronRight, ShieldCheck, BadgeCheck, User as UserIcon, Download, Code, Eye } from 'lucide-react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import Footer from '../components/Footer';
-import difysvg from '../assets/dify.ai.svg'; import n8nsvg from '../assets/n8n.io.svg';
+import difysvg from '../assets/dify.ai.svg';
 
 const DetailPage = ({ item, type = 'template', onBack }) => {
   const [selectedPlatform, setSelectedPlatform] = useState(
@@ -90,34 +90,13 @@ const DetailPage = ({ item, type = 'template', onBack }) => {
             onClick={onBack}
             className="nav-link"
           >
-            <ArrowLeft size={12} strokeWidth={1}/> Back to Templates
+            <ArrowLeft size={12} strokeWidth={1}/> Back to Scenarios
           </button>
-          {/* toggler 平台切换器 */}
-                      {item.dslFiles && item.dslFiles.length > 1 && (
-              <div className="toggler-group">
-                {item.dslFiles.map((dsl) => {
-                  const isSelected = selectedPlatform === dsl.platformName;
-                  const key = dsl.platformName.toLowerCase();
-                  return (
-                    <button
-                      key={dsl.platformName}
-                      className={`toggler-btn${isSelected ? ' selected' : ''}`}
-                      onClick={() => setSelectedPlatform(dsl.platformName)}
-                      type="button"
-                      title={dsl.platformName}
-                    >
-                      {key === 'dify' ? (
-                        <img src={difysvg}  style={{height: 12}}/>
-                      ) : key === 'n8n' ? (
-                        <img src={n8nsvg} style={{height: 12}}/>
-                      ) : (
-                        dsl.platformName
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
+          {/* Dify场景标识 */}
+          <div className="flex items-center gap-2">
+            <img src={difysvg} style={{height: 16}} alt="Dify"/>
+            <span className="text-sm text-secondary-font">Dify Scenario</span>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -143,10 +122,10 @@ const DetailPage = ({ item, type = 'template', onBack }) => {
                 <div className="window-body">
                   <div className="text-center">
                     {item.dslFiles &&
-                    item.dslFiles.find(dsl => dsl.platformName === selectedPlatform)?.svgPreview ? (
+                    item.dslFiles.find(dsl => dsl.platformName === 'Dify')?.svgPreview ? (
                       <img
-                        src={item.dslFiles.find(dsl => dsl.platformName === selectedPlatform)?.svgPreview}
-                        alt="SVG Preview"
+                        src={item.dslFiles.find(dsl => dsl.platformName === 'Dify')?.svgPreview}
+                        alt="Dify Scenario Preview"
                         className="inline-block w-20 h-20 rounded-full border border-[var(--border-color)] mb-6 object-contain"
                       />
                     ) : (
@@ -155,7 +134,7 @@ const DetailPage = ({ item, type = 'template', onBack }) => {
                       </div>
                     )}
                     <p className="window-loading max-w-md mx-auto roboto-mono-regular">
-                      Interactive preview of the workflow is loading from server ...
+                      Interactive preview of the Dify scenario is loading from server ...
                     </p>
                   </div>
                 </div>
