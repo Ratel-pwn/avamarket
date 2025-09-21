@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, LogIn, Fan, LogOut } from 'lucide-react';
@@ -7,9 +7,21 @@ import { ROUTES } from '../constants/routes';
 const Header = ({ onNavigate, activeTab = 'template' }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, user, loginWithRedirect, logout, isLoading } = useAuth0();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // 监听滚动事件
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const NavLink = ({ id, children, to }) => {
     const isActive = activeTab === id;
@@ -27,7 +39,11 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
   };
 
   return (
-    <header className="header-bg border-b border-gray-100" style={{ position: 'relative', zIndex: 9 }}>
+    <header 
+      className={`header-bg transition-all duration-300 ${
+        isScrolled ? 'header-floating' : ''
+      }`} 
+    >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* 左侧导航 */}
