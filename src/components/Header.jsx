@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, LogIn, Fan, LogOut } from 'lucide-react';
+import { ROUTES } from '../constants/routes';
 
 const Header = ({ onNavigate, activeTab = 'template' }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, user, loginWithRedirect, logout, isLoading } = useAuth0();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const NavLink = ({ id, children }) => (
-    <button
-      onClick={() => onNavigate(id)}
-      className={`nav-item rounded-button px-3 py-1 ${
-        activeTab === id
-          ? 'nav-item-active'
-          : ''
-      }`}
-    >
-      {children}
-    </button>
-  );
+  const NavLink = ({ id, children, to }) => {
+    const isActive = activeTab === id;
+    return (
+      <Link
+        to={to || ROUTES.HOME}
+        onClick={() => onNavigate(id)}
+        className={`nav-item rounded-button px-3 py-1 ${
+          isActive ? 'nav-item-active' : ''
+        }`}
+      >
+        {children}
+      </Link>
+    );
+  };
 
   return (
     <header className="header-bg border-b border-gray-100" style={{ position: 'relative', zIndex: 9 }}>
@@ -36,7 +42,13 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
               >
                 <Menu size={20}  color="var(--primary-font)"/>
               </button>
-              <span className="roboto-mono-bold text-lg text-primary-font tracking-tight">AvaMarket</span>
+              <Link 
+                to={ROUTES.HOME}
+                className="roboto-mono-bold text-lg text-primary-font tracking-tight hover:text-primary-font-a80 transition-colors cursor-pointer"
+                onClick={() => onNavigate('template')}
+              >
+                AvaMarket
+              </Link>
             </div>
             
             {/* 主导航 */}
@@ -57,7 +69,7 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
                 if (!isAuthenticated) {
                   loginWithRedirect();
                 } else {
-                  onNavigate('publish');
+                  navigate(ROUTES.PUBLISH);
                 }
               }}
             >
@@ -132,7 +144,7 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
                   if (!isAuthenticated) {
                     loginWithRedirect();
                   } else {
-                    onNavigate('publish');
+                    navigate(ROUTES.PUBLISH);
                   }
                 }}
               >
