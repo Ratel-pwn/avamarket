@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
 import PublishPage from './pages/PublishPage';
 import Header from './components/Header';
+import LoginModal from './components/LoginModal'; // 引入LoginModal
 import { ROUTES } from './constants/routes';
+import { fetchUser } from './store/slices/authSlice';
 import './App.css';
 
 function App() {
   const [activeTab, setActiveTab] = useState('template');
   const navigate = useNavigate();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 管理弹窗状态
+  const dispatch = useDispatch();
+
+  // 在应用加载时，检查是否存在token并尝试获取用户信息
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      dispatch(fetchUser());
+    }
+  }, [dispatch]);
 
   const handleNavigate = (name, payload) => {
     if (name === 'template' || name === 'platform' || name === 'mcp') {
@@ -30,7 +43,15 @@ function App() {
 
   return (
     <div className="App">
-      <Header onNavigate={handleNavigate} activeTab={activeTab} />
+      <Header 
+        onNavigate={handleNavigate} 
+        activeTab={activeTab} 
+        onLoginClick={() => setIsLoginModalOpen(true)} // 传递打开弹窗的函数
+      />
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} // 传递关闭弹窗的函数
+      />
       <Routes>
         <Route 
           path={ROUTES.HOME} 

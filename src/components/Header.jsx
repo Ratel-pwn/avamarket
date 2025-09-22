@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, LogIn, Fan, LogOut } from 'lucide-react';
 import { ROUTES } from '../constants/routes';
+import { logoutUser } from '../store/slices/authSlice';
+import { useAuth0 } from "@auth0/auth0-react";
 
-const Header = ({ onNavigate, activeTab = 'template' }) => {
+const Header = ({ onNavigate, activeTab = 'template', onLoginClick }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isAuthenticated, user, loginWithRedirect, logout, isLoading } = useAuth0();
-  const location = useLocation();
+  
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector(state => state.auth);
+  const auth0 = useAuth0(); // Still keep for SSO logout if needed, but primary auth is via redux
+  
   const navigate = useNavigate();
 
   // 监听滚动事件
@@ -22,6 +27,15 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    // Also logout from auth0 if the user was logged in via SSO
+    if (auth0.isAuthenticated) {
+        auth0.logout({ returnTo: window.location.origin });
+    }
+    setIsProfileOpen(false);
+  };
 
   const NavLink = ({ id, children, to }) => {
     const isActive = activeTab === id;
@@ -83,7 +97,7 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
               className="roboto-mono-light btn-primary h-8.5 items-center gap-2 hidden md:inline-flex"
               onClick={() => {
                 if (!isAuthenticated) {
-                  loginWithRedirect();
+                  onLoginClick();
                 } else {
                   navigate(ROUTES.PUBLISH);
                 }
@@ -94,12 +108,12 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
             </button>
             {/* 个人中心/登录 */}
             <div className="relative">
-              {!isLoading && !isAuthenticated ? (
+              {!isAuthenticated ? (
                 <button
                   className="btn-secondary h-8.5 flex items-center gap-2"
-                  onClick={() => loginWithRedirect()}
+                  onClick={onLoginClick}
                 >
-                  <LogIn size={16} stroekeWidth={1} />
+                  <LogIn size={16} strokeWidth={1} />
                   Login
                 </button>
               ) : (
@@ -110,15 +124,15 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
                   >
                     <span
                       className="truncate rounded-full text-sm"
-                      title={user?.name || user?.email || 'User'}
+                      title={user?.username || user?.email || 'User'}
                       style={{ maxWidth: 96, display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
                     >
-                      {user?.name
-                        ? (user.name.length > 16 ? user.name.slice(0, 16) + '…' : user.name)
+                      {user?.username
+                        ? (user.username.length > 16 ? user.username.slice(0, 16) + '…' : user.username)
                         : (user?.email || 'User')}
                     </span>
                     <img
-                      src={user?.picture || "https://api.dicebear.com/9.x/bottts/svg?seed=User"}
+                      src={user?.picture || `https://api.dicebear.com/9.x/bottts/svg?seed=${user?.username || 'User'}`}
                       alt={user?.name || "User"}
                       className="w-7 h-7 rounded-full"
                     />
@@ -135,7 +149,7 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
                       <hr className="dropdown-menu-divider" />
                       <button
                         className="dropdown-menu-item roboto-mono-semibold text-red-400 hover:text-red-500 hover:bg-red-50"
-                        onClick={() => logout({ returnTo: window.location.origin })}
+                        onClick={handleLogout}
                       >
                         Logout
                       </button>
@@ -158,7 +172,7 @@ const Header = ({ onNavigate, activeTab = 'template' }) => {
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   if (!isAuthenticated) {
-                    loginWithRedirect();
+                    onLoginClick();
                   } else {
                     navigate(ROUTES.PUBLISH);
                   }

@@ -244,16 +244,6 @@ h3 {
   will-change: transform, opacity, backdrop-filter;
 }
 
-/* Hover effect for floating state */
-.header-floating:hover {
-  transform: scale(1.01);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.1),
-    0 3px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.4),
-    inset -1px 0 0 rgba(255, 255, 255, 0.4) !important;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header-floating {
@@ -284,16 +274,6 @@ h3 {
     opacity: 1;
     backdrop-filter: blur(20px) saturate(180%) brightness(1.1);
   }
-}
-
-/* 悬浮状态下的hover效果 */
-.header-floating .max-w-7xl:hover {
-  transform: translateY(0) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.1),
-    0 3px 12px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.4),
-    inset -1px 0 0 rgba(255, 255, 255, 0.4) !important;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* 移动端响应式调整 */
@@ -692,6 +672,23 @@ h3 {
   overflow-y: auto;
 }
 
+/* Popup panel background (not overlay): force solid white and simple header */
+.modal-content.window {
+  background: #fff !important; /* solid, no gradient/transparency */
+}
+.modal-content.window .window-header {
+  background: #fff; /* plain header */
+  border-bottom: 1px solid var(--border-color); /* keep divider */
+}
+
+/* Inputs with leading icon: prevent overlap */
+.input-with-icon .input-field {
+  padding-left: 2.2rem;
+}
+.input-with-icon svg {
+  pointer-events: none;
+}
+
 /* Helpers */
 .line-clamp-2 {
   display: -webkit-box;
@@ -1036,5 +1033,38 @@ svg {
   100% {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+/* Auth modal refinements (restored) */
+.auth-modal {
+  max-width: 28rem; /* ~448px */
+  width: 100%;
+}
+.auth-modal .window-body {
+  padding: 1.5rem; /* tighter than default 2rem to avoid overflow */
+  min-height: auto; /* prevent large empty area */
+  display: block; /* override flex-center to allow natural form flow */
+}
+.auth-modal form .input-field {
+  height: 44px;
+}
+.auth-modal .input-field::placeholder {
+  color: var(--secondary-font);
+  opacity: 0.7;
+}
+.auth-modal .dropdown-menu-divider {
+  margin: 0.75rem 0;
+}
+.auth-modal .btn-primary,
+.auth-modal .btn-secondary {
+  height: 40px;
+}
+@media (max-width: 480px) {
+  .auth-modal {
+    max-width: 22rem;
+  }
+  .auth-modal .window-body {
+    padding: 1.25rem;
   }
 }

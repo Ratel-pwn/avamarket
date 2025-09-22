@@ -22,7 +22,7 @@ const categoryIconMap = {
 };
 
 const HomePage = ({ onOpenDetail }) => {
-  const [selectedCategory, setSelectedCategory] = useState('AI');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { isAuthenticated, loginWithRedirect } = useAuth0();
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [searchResults, setSearchResults] = useState(null);

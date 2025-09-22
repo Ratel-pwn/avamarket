@@ -1,77 +1,94 @@
-import { mockSceneListResponse, mockSceneDetailResponse, mockUserInfo, mockTagList } from "../data/mockData";
+import axios from 'axios';
+import { useAuth0 } from "@auth0/auth0-react";
 
-// 是否使用 mock 数据，建议在 .env 文件中配置 VITE_USE_MOCK=true/false
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
+// 创建一个 axios 实例，用于所有 API 请求
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8090',
+});
 
-// 场景 Summary Search API
-export async function getSceneList(params) {
-  if (USE_MOCK) {
-    // 可根据 params 做简单过滤
-    return Promise.resolve(mockSceneListResponse);
+// 添加一个请求拦截器，在每个请求的 header 中附加 token
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  // 真实接口
-  const res = await fetch("/api/scene/list", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(params)
-  });
-  if (!res.ok) throw new Error("API error: " + res.status);
-  return res.json();
-}
+);
 
-// 场景详情 API
-export async function getSceneDetail(sceneId, userEmail) {
-  if (USE_MOCK) {
-    return Promise.resolve(mockSceneDetailResponse);
-  }
-  const url = `/api/scene/detail?sceneId=${encodeURIComponent(sceneId)}&userEmail=${encodeURIComponent(userEmail)}`;
-  const res = await fetch(url, { method: "GET" });
-  if (!res.ok) throw new Error("API error: " + res.status);
-  return res.json();
-}
+/**
+ * 注册新用户
+ * @param {object} userData - { username, email, password }
+ */
+export const register = (userData) => {
+  return apiClient.post('/auth/register', userData);
+};
 
-// 用户信息展示 API
-export async function getUserInfo(token) {
-  if (USE_MOCK) {
-    return Promise.resolve(mockUserInfo);
-  }
-  const res = await fetch("/api/user/info", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  if (!res.ok) throw new Error("API error: " + res.status);
-  return res.json();
-}
+/**
+ * 用户登录
+ * @param {string} username
+ * @param {string} password
+ */
+export const login = async (username, password) => {
+  const params = new URLSearchParams();
+  params.append('username', username);
+  params.append('password', password);
 
-// 用户信息编辑 API
-export async function editUserInfo(data, token) {
-  if (USE_MOCK) {
-    // 直接返回 mockUserInfo，实际可合并 data
-    return Promise.resolve({ ...mockUserInfo, ...data });
-  }
-  const res = await fetch("/api/user/edit", {
-    method: "POST",
+  const response = await apiClient.post('/auth/login', params, {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: JSON.stringify(data)
   });
-  if (!res.ok) throw new Error("API error: " + res.status);
-  return res.json();
-}
 
-// 标签表 API
-export async function getTagList() {
-  if (USE_MOCK) {
-    return Promise.resolve(mockTagList);
+  if (response.data && response.data.access_token) {
+    localStorage.setItem('accessToken', response.data.access_token);
   }
-  const res = await fetch("/api/tag/list");
-  if (!res.ok) throw new Error("API error: " + res.status);
-  return res.json();
-}
+  return response.data;
+};
+
+/**
+ * 登出，清除 token
+ */
+export const logout = () => {
+  localStorage.removeItem('accessToken');
+};
+
+/**
+ * 获取当前登录的用户信息
+ */
+export const getCurrentUser = () => {
+  return apiClient.get('/auth/users/me');
+};
+
+
+// --- 内容/场景 API ---
+
+/**
+ * 获取场景列表（分页）
+ * @param {object} params - { page, count, filters }
+ */
+export const getSceneList = (params) => {
+  // 接口需要 POST /scene/list
+  return apiClient.post('/scene/list', params);
+};
+
+/**
+ * 获取场景详情
+ * @param {string} sceneId
+ */
+export const getSceneDetail = (sceneId) => {
+  // 接口需要 GET /scene/detail?sceneId=...
+  return apiClient.get('/scene/detail', { params: { sceneId } });
+};
+
+
+// --- 保留原有的 Auth0 功能 ---
 
 // 保留原有 Auth0 认证 API
-import { useAuth0 } from "@auth0/auth0-react";
 export function useProtectedApi() {
   const { getAccessTokenSilently } = useAuth0();
 
@@ -80,6 +97,7 @@ export function useProtectedApi() {
     const token = await getAccessTokenSilently({
       audience: import.meta.env.VITE_AUTH0_AUDIENCE,
     });
+    // 注意：这里仍然使用 Auth0 的 token 和独立的 fetch
     const res = await fetch(`${import.meta.env.VITE_API_URL}/protected`, {
       headers: {
         Authorization: `Bearer ${token}`,
