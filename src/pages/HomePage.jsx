@@ -47,6 +47,12 @@ const HomePage = ({ onOpenDetail }) => {
     dispatch(fetchContentPage({ page: 1, pageSize, filters: {} }));
   }, [dispatch, pageSize]);
 
+  // 通用：按 tags 触发查询
+  const queryByTags = (tags) => {
+    dispatch(resetContent({ tags }));
+    dispatch(fetchContentPage({ page: 1, pageSize, filters: { tags } }));
+  };
+
   // 无限滚动加载更多
   const loaderRef = React.useRef();
   React.useEffect(() => {
@@ -93,23 +99,26 @@ const HomePage = ({ onOpenDetail }) => {
     setSearchResults(null);
     setCurrentView('categories');
     setShowBentoGrid(false);
+    // 查询：用一级分类名作为 tag
+    queryByTags([categoryKey]);
   };
 
   const handleSubcategoryClick = (subcategory) => {
     setSelectedSubcategory(subcategory.name);
-    const results = contentList.filter(t => t.subcategory === subcategory.name);
-    setSearchResults(results);
     setCurrentView('results');
     setShowBentoGrid(false);
+    // 查询：优先用二级标签，可同时带上一级分类增加筛选语义
+    const tags = selectedCategory ? [selectedCategory, subcategory.name] : [subcategory.name];
+    queryByTags(tags);
   };
 
   // 新增：点击 explore more 跳转到该二级分类完整列表
   const handleExploreMore = (subcategoryName) => {
     setSelectedSubcategory(subcategoryName);
-    const results = contentList.filter(t => t.subcategory === subcategoryName);
-    setSearchResults(results);
     setCurrentView('results');
     setShowBentoGrid(false);
+    const tags = selectedCategory ? [selectedCategory, subcategoryName] : [subcategoryName];
+    queryByTags(tags);
   };
 
   const handleContentClick = async (item) => {
@@ -119,19 +128,15 @@ const HomePage = ({ onOpenDetail }) => {
     }
     // 拉取详情数据
     try {
-      // 这里假设 item.id 为场景 id，userEmail 可用 isAuthenticated 用户邮箱或空字符串
       const userEmail = ""; // 可根据实际登录信息获取
       const detail = await getSceneDetail(item.id, userEmail);
-      // 只取第一个模板（如有多个可扩展）
       const template = detail.templates?.[0] || {};
       onOpenDetail(template);
     } catch (err) {
-      // 可加错误提示
       onOpenDetail(item); // fallback
     }
   };
 
-  
   // 首页分区式渲染：每个二级分类一个区块（标题+卡片+explore more）
   const renderCategoriesView = () => {
     if (!selectedCategory) return null;
@@ -140,7 +145,6 @@ const HomePage = ({ onOpenDetail }) => {
     return (
       <div className="page-container flex flex-col gap-12">
         {subcategories.map((subcategory) => {
-          // 获取该二级分类下的所有场景
           const items = contentList.filter(t => t.subcategory === subcategory.name).slice(0, 6);
 
           if (items.length === 0) return null;
@@ -176,15 +180,12 @@ const HomePage = ({ onOpenDetail }) => {
 
   // 二级分类结果页/搜索结果页
   const renderResultsView = () => {
-    // 结果筛选
     let filteredResults = searchResults || contentList;
-    // 如果有 selectedSubcategory，且不是全局搜索，则只显示该二级分类
     if (selectedSubcategory) {
       filteredResults = filteredResults.filter(
         (item) => item.subcategory === selectedSubcategory
       );
     }
-    // 排序（默认按下载量降序）
     filteredResults = [...filteredResults].sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
 
     return (
@@ -282,6 +283,9 @@ const HomePage = ({ onOpenDetail }) => {
                       setCurrentView('categories');
                       setSearchResults(null);
                       setShowBentoGrid(true);
+                      // 重新查询默认列表
+                      dispatch(resetContent());
+                      dispatch(fetchContentPage({ page: 1, pageSize, filters: {} }));
                     }}
                   >
                     <X size={10} strokeWidth={1}/>
@@ -302,6 +306,13 @@ const HomePage = ({ onOpenDetail }) => {
                         setSelectedSubcategory(null);
                         setCurrentView('categories');
                         setSearchResults(null);
+                        // 回退到仅按一级分类查询
+                        if (selectedCategory) {
+                          queryByTags([selectedCategory]);
+                        } else {
+                          dispatch(resetContent());
+                          dispatch(fetchContentPage({ page: 1, pageSize, filters: {} }));
+                        }
                       }}
                     >
                       <X size={10} strokeWidth={1}/>
@@ -349,11 +360,7 @@ const HomePage = ({ onOpenDetail }) => {
                       selectedCategory === cat ? 'nav-item-active' : ''
                     }`}
                     onClick={() => {
-                      setSelectedCategory(cat);
-                      setSelectedSubcategory(null);
-                      setCurrentView('categories');
-                      setSearchResults(null);
-                      setShowBentoGrid(false);
+                      handleCategorySelect(cat);
                     }}
                   >
                     <span className="inline-flex items-center leading-none">{categoryIconMap[cat]}</span>
@@ -376,16 +383,7 @@ const HomePage = ({ onOpenDetail }) => {
                     className={`nav-item flex flex-row items-center gap-1 min-w-[80px] px-3 py-2 rounded-card border-none ${
                       selectedSubcategory === subcat.name ? 'nav-item-active' : ''
                     }`}
-                    onClick={() => {
-                      setSelectedSubcategory(subcat.name);
-                      setCurrentView('results');
-                      const results = [
-                        ...templates.filter(t => t.subcategory === subcat.name),
-                        ...platforms.filter(p => p.subcategory === subcat.name)
-                      ];
-                      setSearchResults(results);
-                      setShowBentoGrid(false);
-                    }}
+                    onClick={() => handleSubcategoryClick(subcat)}
                   >
                     <span className="leading-none">{subcat.icon}</span>
                     <span className="text-xs leading-none">{subcat.name}</span>
